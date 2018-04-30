@@ -168,6 +168,17 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
 def json = new ObjectMapper().writeValueAsString(templateMap)
 ExecutionUtil.setDynamicProcessProperty("AmazonTemplateMap", json, false);
 
+
+/**
+ * Explain what this function does. 
+ *
+ *
+ * @author Latrice Sebastian
+ * @param id
+ * @return String
+ * @process NS Inventory to Channels
+ * 
+ */
 def getLocationByID(id){
 	switch(id){
 	case '1':
