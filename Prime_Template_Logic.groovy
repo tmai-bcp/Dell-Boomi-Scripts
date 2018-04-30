@@ -1,3 +1,12 @@
+/**
+ * Explain what this script does. 
+ *
+ *
+ * @author Latrice Sebastian
+ * @process NS Inventory to Channels
+ * 
+ */
+
 import java.util.Properties;
 import java.io.InputStream;
 import org.jdom.input.SAXBuilder;
