@@ -35,7 +35,7 @@ templateMap = [:];
 
 Logger logger = ExecutionUtil.getBaseLogger();
 
-//creates the mapping
+//Creates the mapping
 for( int i = 0; i < dataContext.getDataCount(); i++ ) {
 	InputStream is = dataContext.getStream(i);
 	Properties props = dataContext.getProperties(i);
@@ -172,7 +172,7 @@ ExecutionUtil.setDynamicProcessProperty("AmazonTemplateMap", json, false);
 
 
 /**
- * Retuns the location based on the given ID. 1 = CA, 37 = IND, 43 = GA, everything else is an error.  
+ * Returns the location based on the given ID. 1 = CA, 37 = IND, 43 = GA, everything else is an error.  
  *
  *
  * @author Latrice Sebastian
