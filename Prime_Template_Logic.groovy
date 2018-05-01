@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import com.boomi.execution.ExecutionUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+//Sets Prime status for warehouse QTY of >= 50
 CUTOFFQTY = 50;
 NOPRIMETEMPL = 'NO PRIME Standard Sept 2016';
 PRIMEALLTEMPL = 'PRIME ALL 2016';
@@ -46,7 +47,7 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
 	Attribute locationAttr = XPath.newInstance("//*[local-name() = 'inventoryLocationJoin']/*/*/@internalId").selectSingleNode(doc);
 	Attribute itemNameAttr = XPath.newInstance("//*[local-name() = 'externalId']/*/@externalId").selectSingleNode(doc);
 
-
+	// Get sum of QTY from all warehouse locations
 	if(itemNameAttr != null) {
 		String itemName = itemNameAttr.getValue();
 		String locationName = 'Error';
@@ -76,6 +77,7 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
 
 logger.warning(itemMap.toString())
 
+// Creates the mapping
 for( int i = 0; i < dataContext.getDataCount(); i++ ) {
 	InputStream is = dataContext.getStream(i);
 	Properties props = dataContext.getProperties(i);
@@ -170,7 +172,7 @@ ExecutionUtil.setDynamicProcessProperty("AmazonTemplateMap", json, false);
 
 
 /**
- * Explain what this function does. 
+ * Retuns the location based on the given ID. 1 = CA, 37 = IND, 43 = GA, everything else is an error.  
  *
  *
  * @author Latrice Sebastian
