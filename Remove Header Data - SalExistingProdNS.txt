@@ -1,0 +1,56 @@
+import java.util.Properties;
+import java.io.InputStream;
+import com.boomi.execution.ExecutionUtil;
+import groovy.json.JsonSlurper;
+import groovy.json.JsonOutput;
+import java.util.List;
+import java.util.Map;
+
+//Used in Salsify Existing Products to Salsify NS Products Queue, in Remove Header Data shape
+
+logger = ExecutionUtil.getBaseLogger();
+
+for( int i = 0; i < dataContext.getDataCount(); i++ ) {
+	InputStream is = dataContext.getStream(i);
+	Properties props = dataContext.getProperties(i);
+
+	json_string_temp = is.getText();
+	json_string = json_string_temp.substring(json_string_temp.indexOf("{\"products\":["));
+	json_string = "[" + json_string;
+	json_string = json_string.replaceAll("salsify:profile_asset_id\":.*?,", "salsify:profile_asset_id\":null,");
+	
+	def object = new JsonSlurper().parseText(json_string); 
+	for (int j = 0; j < object.get(0).products.size(); j++){
+		vendorsList = [];
+
+		vendorsList[0] = object.get(0).products.get(j).'Vendor Name';
+
+		vendorsList = vendorsList.flatten() - null;
+		
+		for (int k = 0; k < vendorsList.size(); k++){
+			def vendorMap = [:]
+			def preferredVendor = ""
+			vendorMap.put("Vendor Name", vendorsList[k])
+			if (k == vendorsList.size() - 1) {
+				preferredVendor = true
+			}
+				else{
+					preferredVendor = false
+				}
+				vendorMap.put("Preferred Vendor", preferredVendor)
+			vendorsList[k] = vendorMap
+		}
+
+		object.get(0).products.get(j).'Vendor Name' = vendorsList;
+	}
+	
+	// logger.warning(imagesList.toString());
+	// logger.warning(audienceList.toString());
+	// logger.warning(keywordsList.toString());
+	// logger.warning(featuresList.toString());
+	// logger.warning(aliasList.toString());
+	text = JsonOutput.toJson(object);
+
+	is = new ByteArrayInputStream(text.getBytes("UTF-8"));
+	dataContext.storeStream(is, props);
+}
